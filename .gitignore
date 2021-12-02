@@ -1,3 +1,9 @@
 **/target/**
 **/.idea/**
 **/*.iml
+.DS_Store
+**/.cache-main
+**/.classpath
+**/.project
+.cache-tests
+.settings
