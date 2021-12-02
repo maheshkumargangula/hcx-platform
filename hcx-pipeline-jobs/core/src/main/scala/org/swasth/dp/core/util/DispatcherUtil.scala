@@ -45,27 +45,30 @@ object DispatcherUtil {
 
   def dispatch(ctx: util.Map[String, AnyRef], payload: String): DispatcherResult = {
     val url = ctx.get("endpoint_url").asInstanceOf[String]
+    println("url:" + url)
     val headers = ctx.getOrDefault("headers", Map[String, String]()).asInstanceOf[Map[String, String]]
 
     val httpPost = new HttpPost(url);
     headers.map(f => httpPost.addHeader(f._1, f._2));
     httpPost.setEntity(new StringEntity(payload))
     httpPost.setHeader("Accept", "application/json")
-    httpPost.setHeader("Content-type", "application/json")
+    httpPost.setHeader("Content-Type", "application/json")
     try {
       val response = httpClient.execute(httpPost);
       val statusCode = response.getStatusLine().getStatusCode();
       val responseBody = EntityUtils.toString(response.getEntity, StandardCharsets.UTF_8);
+      println("response: " + statusCode + " :: " + responseBody)
       val responseJSON: Response = JSONUtil.deserialize[Response](responseBody);
       if(successCodes.contains(statusCode)) {
         DispatcherResult(true, statusCode, None, false)
       } else if(errorCodes.contains(statusCode)) {
         DispatcherResult(false, statusCode, responseJSON.error, false)
       } else {
-        DispatcherResult(false, statusCode, None, true)
+        DispatcherResult(false, statusCode, responseJSON.error, true)
       }
     } catch {
       case ex:Exception => {
+        ex.printStackTrace()
         DispatcherResult(false, 0, None, true)
       }
     }

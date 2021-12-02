@@ -65,7 +65,7 @@ class CoverageEligibilityProcessFunction(config: CoverageEligibilityCheckConfig,
     println("Audit event generation")
     val audit = new util.HashMap[String, AnyRef]();
     audit.put("audit", "yes")
-    context.output(config.auditOutputTag, audit)
+//    context.output(config.auditOutputTag, audit)
     metrics.incCounter(config.auditEventsCount)
   }
 }

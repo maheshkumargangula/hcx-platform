@@ -64,7 +64,7 @@ abstract class BaseDispatcherFunction (config: BaseJobConfig)
     }
 
     if(validationResult.status) {
-      println("Dispatcher validation success" + metrics)
+      println("Dispatcher validation success.")
       metrics.incCounter(metric = config.dispatcherValidationSuccessCount)
       val payload = getPayload(event);
       val payloadJSON = JSONUtil.serialize(payload);
@@ -75,7 +75,7 @@ abstract class BaseDispatcherFunction (config: BaseJobConfig)
         metrics.incCounter(metric = config.dispatcherSuccessCount)
       }
       if(result.retry) {
-        println("Dispatcher dispatch retry")
+        println("Dispatcher dispatch retry: " + result)
         metrics.incCounter(metric = config.dispatcherRetryCount)
         val retryEvent = new util.HashMap[String, AnyRef]();
         retryEvent.put("ctx", recipientCtx);
